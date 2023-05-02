@@ -41,38 +41,40 @@ public class Main {
             texts[i] = generateText("abc", 3 + random.nextInt(3));
         }
 
-        Thread thread3 = new Thread(() -> {
+        Thread palindrome = new Thread(() -> {
             for (String text : texts) {
-                if (text.length() == 3) {
-                    counterCriteria(text, beautyThree);
+                if (new StringBuffer(text).reverse().toString().equals(text)) {
+                    counterUpdate(text);
                 }
             }
         });
 
-        thread3.start();
+        palindrome.start();
 
-        Thread thread4 = new Thread(() -> {
+        Thread similar = new Thread(() -> {
             for (String text : texts) {
-                if (text.length() == 4) {
-                    counterCriteria(text, beautyFour);
+                if ((int) IntStream.range(0, text.length()).filter(j -> text.charAt(j) == text.charAt(0)).count() == text.length()) {
+                    counterUpdate(text);
                 }
             }
         });
 
-        thread4.start();
+        similar.start();
 
         Thread thread5 = new Thread(() -> {
             for (String text : texts) {
                 if (text.length() == 5) {
-                    counterCriteria(text, beautyFive);
+                    if (isAlphabaticOrder(text)) {
+                        counterUpdate(text);
+                    }
                 }
             }
         });
 
         thread5.start();
 
-        thread3.join();
-        thread4.join();
+        palindrome.join();
+        similar.join();
         thread5.join();
 
         String base = "Красивых слов с длиной ";
@@ -83,18 +85,19 @@ public class Main {
         System.out.println(stringBuilder);
     }
 
-    private static void counterCriteria(String text, AtomicInteger beautyCount) {
-        if (new StringBuilder(text).reverse().toString().equals(text)) {
-            beautyCount.incrementAndGet();
-        }
-
-        int count = (int) IntStream.range(0, text.length()).filter(j -> text.charAt(j) == text.charAt(0)).count();
-        if (text.length() == count) {
-            beautyCount.incrementAndGet();
-        }
-
-        if (isAlphabaticOrder(text)) {
-            beautyCount.incrementAndGet();
+    private static void counterUpdate(String text) {
+        switch (text.length()) {
+            case 3:
+                beautyThree.incrementAndGet();
+                break;
+            case 4:
+                beautyFour.incrementAndGet();
+                break;
+            case 5:
+                beautyFive.incrementAndGet();
+                break;
         }
     }
+
+
 }
