@@ -22,7 +22,7 @@ public class Main {
 
     private static boolean isAlphabaticOrder(String s) {
         int n = s.length();
-        char[] copy = new char [n];
+        char[] copy = new char[n];
 
         IntStream.range(0, n).forEachOrdered(i -> copy[i] = s.charAt(i));
         Arrays.sort(copy);
@@ -33,6 +33,21 @@ public class Main {
 
         return true;
     }
+
+    private static void counterUpdate(String text) {
+        switch (text.length()) {
+            case 3:
+                beautyThree.incrementAndGet();
+                break;
+            case 4:
+                beautyFour.incrementAndGet();
+                break;
+            case 5:
+                beautyFive.incrementAndGet();
+                break;
+        }
+    }
+
     public static void main(String[] args) throws InterruptedException {
 
         Random random = new Random();
@@ -78,26 +93,10 @@ public class Main {
         thread5.join();
 
         String base = "Красивых слов с длиной ";
-        String stringBuilder =
+        String report =
                 base + 3 + ": " + beautyThree.get() + " шт" + "\n" +
-                base + 4 + ": " + beautyFour.get() + " шт" + "\n" +
-                base + 5 + ": " + beautyFive.get() + " шт" + "\n";
-        System.out.println(stringBuilder);
+                        base + 4 + ": " + beautyFour.get() + " шт" + "\n" +
+                        base + 5 + ": " + beautyFive.get() + " шт" + "\n";
+        System.out.println(report);
     }
-
-    private static void counterUpdate(String text) {
-        switch (text.length()) {
-            case 3:
-                beautyThree.incrementAndGet();
-                break;
-            case 4:
-                beautyFour.incrementAndGet();
-                break;
-            case 5:
-                beautyFive.incrementAndGet();
-                break;
-        }
-    }
-
-
 }
